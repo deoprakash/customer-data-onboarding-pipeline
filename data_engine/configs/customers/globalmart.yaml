@@ -1,0 +1,21 @@
+customer_id:
+  source: client_code
+  required: true
+first_name:
+  source: customer_full_name
+  required: true
+  transformation: split_first
+last_name:
+  source: customer_full_name
+  required: true
+  transformation: split_last
+email:
+  source: email_address
+  required: true
+phone:
+  source: mobile_number
+  required: true
+created_at:
+  source: registration_date
+  required: true
+  format: '%Y-%m-%d'

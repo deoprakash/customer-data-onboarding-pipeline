@@ -1,0 +1,159 @@
+[
+  {
+    "version": 4,
+    "author": "User",
+    "date": "Sep 24, 2026",
+    "changes": [
+      "Minor mapping update"
+    ],
+    "config": {
+      "customer_id": {
+        "source": "client_code",
+        "required": true
+      },
+      "first_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_first"
+      },
+      "last_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_last"
+      },
+      "email": {
+        "source": "email_address",
+        "required": true
+      },
+      "phone": {
+        "source": "mobile_number",
+        "required": true
+      },
+      "created_at": {
+        "source": "registration_date",
+        "required": true,
+        "format": "%Y-%m-%d"
+      }
+    },
+    "status": "Published"
+  },
+  {
+    "version": 3,
+    "author": "User",
+    "date": "Sep 24, 2026",
+    "changes": [
+      "Minor mapping update"
+    ],
+    "config": {
+      "customer_id": {
+        "source": "client_code",
+        "required": true
+      },
+      "first_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_first"
+      },
+      "last_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_last"
+      },
+      "email": {
+        "source": "email_address",
+        "required": true
+      },
+      "phone": {
+        "source": "mobile_number",
+        "required": true
+      },
+      "created_at": {
+        "source": "registration_date",
+        "required": true,
+        "format": "%d/%m/%Y"
+      }
+    },
+    "status": "Archived"
+  },
+  {
+    "version": 2,
+    "author": "User",
+    "date": "Sep 24, 2026",
+    "changes": [
+      "Minor mapping update"
+    ],
+    "config": {
+      "customer_id": {
+        "source": "client_code",
+        "required": true
+      },
+      "first_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_first"
+      },
+      "last_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_last"
+      },
+      "email": {
+        "source": "email_address",
+        "required": true
+      },
+      "phone": {
+        "source": "mobile_number",
+        "required": true
+      },
+      "created_at": {
+        "source": "registration_date",
+        "required": true,
+        "format": "%d/%m/%Y"
+      }
+    },
+    "status": "Archived"
+  },
+  {
+    "version": 1,
+    "author": "User",
+    "date": "Sep 24, 2026",
+    "changes": [
+      "none → client_code",
+      "none → customer_full_name",
+      "none → customer_full_name",
+      "none → email_address",
+      "none → mobile_number",
+      "none → registration_date"
+    ],
+    "config": {
+      "customer_id": {
+        "source": "client_code",
+        "required": true
+      },
+      "first_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_first"
+      },
+      "last_name": {
+        "source": "customer_full_name",
+        "required": true,
+        "transformation": "split_last"
+      },
+      "email": {
+        "source": "email_address",
+        "required": true
+      },
+      "phone": {
+        "source": "mobile_number",
+        "required": true
+      },
+      "created_at": {
+        "source": "registration_date",
+        "required": true,
+        "format": "ISO8601"
+      }
+    },
+    "status": "Archived"
+  }
+]

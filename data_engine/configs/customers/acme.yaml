@@ -1,0 +1,21 @@
+customer_id:
+  source: id
+  required: true
+first_name:
+  source: full_name
+  required: true
+  transformation: first_name
+last_name:
+  source: full_name
+  required: true
+  transformation: last_name
+email:
+  source: email_id
+  required: true
+phone:
+  source: mobile
+  required: true
+created_at:
+  source: joined_on
+  format: '%d/%m/%Y'
+  required: true

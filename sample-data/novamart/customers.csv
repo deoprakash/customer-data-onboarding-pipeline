@@ -1,0 +1,6 @@
+client_ref,customer_name,contact_email,contact_number,signup_date
+N001,Emma Johnson,emma@novamart.com,8888881001,2026-09-01
+N002,Daniel Smith,daniel@novamart.com,8888881002,2026-09-02
+N003,Olivia Brown,olivia@novamart.com,8888881003,2026-09-03
+N004,Liam Wilson,liam@novamart.com,8888881004,2026-09-04
+N005,Sophia Davis,,8888881005,2026-09-05
