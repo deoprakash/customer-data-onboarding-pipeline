@@ -57,13 +57,16 @@ router.post("/", upload.single("file"), async (req, res) => {
     
     if (!hasSchema) {
       const csvContent = fs.readFileSync(req.file.path, 'utf8');
-      const firstLine = csvContent.split('\n')[0];
+      const lines = csvContent.split('\n');
+      const firstLine = lines[0];
+      const secondLine = lines[1] || "";
       const sourceHeaders = firstLine ? firstLine.trim() : "unknown";
+      const sampleRow = secondLine ? secondLine.trim() : "unknown";
       
       require('dotenv').config({ path: path.join(__dirname, "../../../data_engine/.env") });
       const apiKey = process.env.GROQ_API;
       const canonicalSchema = "- customer_id (required)\\n- first_name (required)\\n- last_name (required)\\n- email (required)\\n- phone (required)\\n- created_at (required)";
-      const prompt = `You are an expert data integration assistant. Map the following source CSV headers to the canonical schema. Source Headers: ${sourceHeaders} Canonical Schema: ${canonicalSchema} Return a strictly valid JSON object representing the mapping. The keys must be the canonical schema fields. The values must be objects with 'source' (the matching source header), 'required' (boolean), and optionally 'transformation' or 'format' if needed. Only output JSON, no markdown blocks.`;
+      const prompt = `You are an expert data integration assistant. Map the following source CSV headers to the canonical schema. Source Headers: ${sourceHeaders} Sample Data: ${sampleRow} Canonical Schema: ${canonicalSchema} Return a strictly valid JSON object representing the mapping. The keys must be the canonical schema fields. The values must be objects with 'source' (the matching source header), 'required' (boolean), and optionally 'transformation' or 'format' if needed. For date fields, you MUST infer the exact Python strptime 'format' (e.g., '%Y-%m-%d', '%d/%m/%Y', '%m-%d-%Y') from the Sample Data provided. Do not just use 'ISO'. Only output JSON, no markdown blocks.`;
       
       const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST", headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -339,6 +342,37 @@ router.get("/customer/:customerName", async (req, res) => {
     console.error(error);
     res.status(500).json({
       error: "Failed to retrieve customer jobs",
+    });
+  }
+});
+
+router.get("/customer/:customerName/rejected", async (req, res) => {
+  try {
+    const { customerName } = req.params;
+
+    const result = await pool.query(
+      `
+        SELECT
+            id,
+            job_id,
+            row_number as row,
+            customer,
+            field_name as field,
+            error_message as error,
+            raw_value as value,
+            status
+        FROM rejected_records
+        WHERE customer ILIKE $1
+        ORDER BY row_number ASC
+      `,
+      [customerName]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Failed to retrieve rejected records for customer",
     });
   }
 });

@@ -1,0 +1,44 @@
+[
+  {
+    "version": 1,
+    "author": "User",
+    "date": "Sep 25, 2026",
+    "changes": [
+      "none → client_ref",
+      "none → customer_name",
+      "none → customer_name",
+      "none → contact_email",
+      "none → contact_number",
+      "none → signup_date"
+    ],
+    "config": {
+      "customer_id": {
+        "source": "client_ref",
+        "required": true
+      },
+      "first_name": {
+        "source": "customer_name",
+        "required": true,
+        "transformation": "split_name_first"
+      },
+      "last_name": {
+        "source": "customer_name",
+        "required": true,
+        "transformation": "split_name_last"
+      },
+      "email": {
+        "source": "contact_email",
+        "required": true
+      },
+      "phone": {
+        "source": "contact_number",
+        "required": true
+      },
+      "created_at": {
+        "source": "signup_date",
+        "required": true
+      }
+    },
+    "status": "Published"
+  }
+]

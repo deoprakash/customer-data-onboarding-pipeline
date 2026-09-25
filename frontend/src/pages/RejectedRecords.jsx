@@ -7,17 +7,30 @@ export default function RejectedRecords({ customerName, jobId, customers = [], o
   const [filterErrorType, setFilterErrorType] = useState('');
   const [filterField, setFilterField] = useState('');
 
+  const [currentJobId, setCurrentJobId] = useState(jobId);
+
+  useEffect(() => {
+    if (jobId) {
+      setCurrentJobId(jobId);
+    }
+  }, [jobId]);
+
   useEffect(() => {
     const fetchRecords = async () => {
       try {
         setLoading(true);
-        // Note: Currently we assume jobId is provided. If not, this component would need to fetch the latest job.
-        if (!jobId) {
-            setLoading(false);
-            return;
+        let url;
+        
+        if (currentJobId) {
+          url = `http://localhost:3000/jobs/${currentJobId}/rejected`;
+        } else if (customerName) {
+          url = `http://localhost:3000/jobs/customer/${customerName}/rejected`;
+        } else {
+          setLoading(false);
+          return;
         }
         
-        const response = await fetch(`http://localhost:3000/jobs/${jobId}/rejected`);
+        const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch rejected records');
         
         const data = await response.json();
@@ -30,7 +43,7 @@ export default function RejectedRecords({ customerName, jobId, customers = [], o
     };
 
     fetchRecords();
-  }, [jobId]);
+  }, [currentJobId, customerName]);
 
   const filteredRecords = records.filter(record => {
     if (filterErrorType && !record.error.toLowerCase().includes(filterErrorType.toLowerCase())) return false;
@@ -45,7 +58,7 @@ export default function RejectedRecords({ customerName, jobId, customers = [], o
     <div className="dashboard-panel" style={{ animation: 'fadeIn 0.5s ease' }}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="panel-title" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          Rejected Records {jobId ? `(Job: ${jobId})` : ''}
+          Rejected Records {currentJobId ? `(Job: ${currentJobId})` : (customerName ? `(Customer: ${customerName})` : '')}
           {customers && customers.length > 0 && onCustomerChange && (
             <select 
               className="input-field" 

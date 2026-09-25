@@ -4,7 +4,7 @@
 
 An enterprise-style customer data onboarding platform designed for **B2B SaaS teams** that regularly receive customer data in inconsistent CSV formats.
 
-Instead of building a custom ingestion script for every customer, this platform uses **AI-assisted schema mapping, human approval, configurable transformations, asynchronous processing, validation, and PostgreSQL persistence** to create a reusable customer onboarding workflow.
+Instead of building a custom ingestion script for every customer, this platform uses **AI-assisted schema mapping, human approval, configurable transformations, asynchronous processing, validation, PostgreSQL persistence, and robust automated E2E testing with Playwright** to create a reusable, self-healing customer onboarding workflow.
 
 ---
 
@@ -180,6 +180,18 @@ The AI recommends.
 The engineer decides.
 
 This provides an additional safety layer for customer data.
+
+---
+
+## 🚑 LLM Auto-Healing (Schema Drift Recovery)
+
+When an existing customer changes their CSV structure unexpectedly (e.g., changing a column name from `contact_email` to `email_address`, or altering a date format from `YYYY-MM-DD` to `DD/MM/YYYY`), traditional pipelines crash and require manual intervention.
+
+This platform features **auto-healing**:
+1. The pipeline catches the schema drift failure.
+2. It sends the crash logs and the new CSV sample back to the LLM.
+3. The LLM automatically diagnoses the change and rewrites the YAML configuration.
+4. The pipeline auto-retries with the new schema and completes the job.
 
 ---
 
@@ -1171,7 +1183,24 @@ For a complete test, use:
 sample-data/globalmart/customers.csv
 ```
 
-The expected flow is:
+## Automated E2E Testing
+
+The repository contains an automated E2E test suite using **Playwright**.
+
+To run the full suite:
+
+```bash
+cd e2e-tests
+npm install
+npx playwright test --ui
+```
+
+These tests automatically verify:
+- Navigation and Health checks.
+- Form validations and Human-in-the-Loop review interactions.
+- Complex flows: New customer AI mapping generation, and **LLM Auto-Healing** simulating schema drift recovery.
+
+The expected flow for onboarding is:
 
 ```text
 React
@@ -1564,24 +1593,23 @@ PostgreSQL
 
 ## Phase 2 — Onboarding Platform
 
-* [ ] Customer management
-* [ ] Data profiling dashboard
-* [ ] Rejected-record viewer
-* [ ] Schema mapping UI
-* [ ] Configuration management
-* [ ] Mapping version history
-* [ ] Rollback support
-* [ ] Activity logs
+* [x] Customer management
+* [x] Data profiling dashboard
+* [x] Rejected-record viewer (Cross-job data quality view)
+* [x] Schema mapping UI
+* [x] Configuration management
+* [x] Mapping version history
+* [x] Rollback support
+* [x] Activity logs
 
-## Phase 3 — AI Onboarding
+## Phase 3 — AI Onboarding & Automation
 
-* [ ] Automatic schema discovery
-* [ ] LLM-powered mapping
-* [ ] Mapping confidence scores
-* [ ] Mapping explanations
-* [ ] Human approval workflow
-* [ ] AI mapping history
-* [ ] Automatic remapping suggestions
+* [x] Automatic schema discovery
+* [x] LLM-powered schema mapping
+* [x] Mapping confidence scores
+* [x] Human-in-the-loop approval workflow
+* [x] End-to-End E2E Testing (Playwright integration)
+* [x] **LLM Auto-Healing**: If a previously onboarded customer uploads a file with schema drift (e.g. column renames, date format changes), the pipeline crashes safely, hands the error and actual data sample back to the LLM, repairs the YAML mapping, and auto-retries.
 
 ## Phase 4 — Production Hardening
 

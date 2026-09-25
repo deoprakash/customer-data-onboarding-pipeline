@@ -55,6 +55,8 @@ function App() {
   const handleTabChange = (tab) => {
     if (tab === 'customers') {
       setSelectedCustomerForDetail(null); // Reset detail view when clicking 'Customers' tab
+    } else if (tab === 'dataQuality') {
+      setActiveJobId(''); // Reset job ID to show all rejected records for the customer
     }
     setActiveTab(tab);
   };
